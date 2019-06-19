@@ -1,0 +1,76 @@
+Q1. Write a query to fetch only the first name(string before space) from the FullName column of EmployeeDetails table.
+Ans. select substr('ayush sharma', 0,instr('ayush sharma', ' ')) from scott.emp;
+
+_______________________________________________________________________________________________________________________________
+
+Q2. Write a SQL query to fetch all employee records from EmployeeDetails table who have a salary record in EmployeeSalary table.
+Ans. Using 'Exists'-
+
+SELECT * FROM EmployeeDetails E 
+WHERE EXISTS 
+(SELECT * FROM EmployeeSalary S WHERE  E.EmpId = S.EmpId);
+
+__________________________________________________________________________________________________________________________________
+
+Q3. Write a SQL query to fetch duplicate records from a table.
+Ans. In order to find duplicate records from table we can use GROUP BY on all the fields and then use HAVING clause to return only those fields whose count is greater than 1 i.e. the rows having duplicate records.
+
+SELECT EmpId, Project, Salary, COUNT(*)
+FROM EmployeeSalary
+GROUP BY EmpId, Project, Salary
+HAVING COUNT(*) > 1;
+
+________________________________________________________________________________________________________________________________
+
+Q4. Write a SQL query to fetch only odd rows from table.
+
+Ans. select * from (select e.*,ROW_NUMBER() OVER (ORDER BY sal DESC) rn from scott.emp e)  where mod(rn,2) = 1;
+
+________________________________________________________________________________________________________________________________
+
+Q5. Write SQL query to find the nth highest salary from table.
+Ans. SELECT * FROM (SELECT e.*, ROW_NUMBER() OVER (ORDER BY sal DESC) rn FROM scott.Emp e) WHERE rn = 3;
+
+________________________________________________________________________________________________________________________________
+Q6. Use the following generic method to find nth highest salary without using TOP or limit.
+
+Ans.
+SELECT Salary FROM Worker W1 WHERE n-1 = (SELECT COUNT( DISTINCT ( W2.Salary ) ) FROM Worker W2 WHERE W2.Salary >= W1.Salary);
+________________________________________________________________________________________________________________________________
+
+Q7. Write An SQL Query To Show The Second Highest Salary From A Table.
+Ans.
+
+The required query is:
+
+Select max(Salary) from Worker 
+where Salary not in (Select max(Salary) from Worker);
+________________________________________________________________________________________________________________________________
+
+Q8. Write An SQL Query To Fetch Three Max Salaries From A Table.
+Ans.
+select distinct sal from scott.emp ayush where 3 >= (select count(distinct sal) from scott.emp kavinya where ayush.sal <= kavinya.sal) order by sal desc;
+
+________________________________________________________________________________________________________________________________
+
+Q9. Fetch the details of employee earning highest salary for every job category.
+Ans. select a.ename, a.job, a.sal from scott.emp a where (a.job, a.sal) in (select b.job, max(b.sal) from scott.emp b group by b.job);
+
+________________________________________________________________________________________________________________________________
+
+There are 7 aggregate functions we use in SQL
+
+AVG(): Returns the average value from specified columns
+COUNT(): Returns number of table rows
+MAX(): Returns largest value among the records
+MIN(): Returns smallest value among the records
+SUM(): Returns the sum of specified column values
+FIRST(): Returns the first value
+LAST(): Returns Last value
+UCASE(): Converts the specified field in upper case
+LCASE(): Converts the specified field in lower case
+MID(): Extracts and returns character from text field
+FORMAT(): Specifies the display format
+LEN(): Specifies the length of text field
+ROUND(): Rounds up the decimal field value to a number
+There are 3-row comparison operators which are used in subqueries such as IN, ANY and ALL.
